@@ -3,6 +3,6 @@ package main
 import "github.com/AntonioHenriqueGF/apigo/router"
 
 func main() {
-	// Inicializa o Router
+	// Initializes the router
 	router.Init()
 }
