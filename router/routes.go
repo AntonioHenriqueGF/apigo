@@ -21,6 +21,6 @@ func InitializeRoutes(router *gin.Engine) {
 		v1.DELETE("/note", handler.DeleteNoteHandler)
 
 		// Show all notes
-		v1.GET("/notes", handler.ShowAllNotesHandler)
+		v1.GET("/notes", handler.ListNotesHandler)
 	}
 }
