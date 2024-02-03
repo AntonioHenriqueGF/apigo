@@ -1,0 +1,22 @@
+# Binaries
+
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test Binary
+
+*.test
+
+# Coverage
+
+*.out
+
+# DB Folder
+
+db/
+
+# Environment
+
+.env
