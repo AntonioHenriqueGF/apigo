@@ -16,13 +16,13 @@ type Logger struct {
 
 func NewLogger(p string) *Logger {
 	writer := io.Writer(os.Stdout)
-	logger := log.New(writer, p, log.Lshortfile|log.LstdFlags)
+	logger := log.New(writer, p, log.LstdFlags)
 
 	return &Logger{
-		debug:   log.New(writer, "DEBUG: ", logger.Flags()),
-		info:    log.New(writer, "INFO: ", logger.Flags()),
-		warning: log.New(writer, "WARNING: ", logger.Flags()),
-		err:     log.New(writer, "ERROR: ", logger.Flags()),
+		debug:   log.New(writer, "[DEBUG] 		", logger.Flags()),
+		info:    log.New(writer, "[INFO] 		", logger.Flags()),
+		warning: log.New(writer, "[WARNING] 	", logger.Flags()),
+		err:     log.New(writer, "[ERROR] 		", logger.Flags()),
 		writer:  writer,
 	}
 }
