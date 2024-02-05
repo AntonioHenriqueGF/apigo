@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func DeleteNoteHandler(ctx *gin.Context) {
+func CreatePostHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "DELETE /note",
+		"message": "POST /post",
 	})
 }

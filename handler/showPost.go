@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UpdateNoteHandler(ctx *gin.Context) {
+func ShowPostHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "PUT /note",
+		"message": "GET /post",
 	})
 }

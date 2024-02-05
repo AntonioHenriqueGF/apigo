@@ -6,21 +6,24 @@ import (
 )
 
 func InitializeRoutes(router *gin.Engine) {
+	// Initialize handler
+	handler.InitializeHandler()
+
 	v1 := router.Group("/api/v1")
 	{
-		// Show note
-		v1.GET("/note", handler.ShowNoteHandler)
+		// Show Post
+		v1.GET("/post", handler.ShowPostHandler)
 
-		// Create note
-		v1.POST("/note", handler.CreateNoteHandler)
+		// Create Post
+		v1.POST("/post", handler.CreatePostHandler)
 
-		// Update note
-		v1.PUT("/note", handler.UpdateNoteHandler)
+		// Update Post
+		v1.PUT("/post", handler.UpdatePostHandler)
 
-		// Delete note
-		v1.DELETE("/note", handler.DeleteNoteHandler)
+		// Delete Post
+		v1.DELETE("/post", handler.DeletePostHandler)
 
-		// Show all notes
-		v1.GET("/notes", handler.ListNotesHandler)
+		// Show all Posts
+		v1.GET("/posts", handler.ListPostsHandler)
 	}
 }

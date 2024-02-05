@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ShowNoteHandler(ctx *gin.Context) {
+func ListPostsHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "GET /note",
+		"message": "GET /posts",
 	})
 }
