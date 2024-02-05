@@ -18,12 +18,12 @@ func InitializeMySQL() (*sql.DB, error) {
 	database := GetEnv("DB_DATABASE")
 
 	// Create the connection string
-	var connectionString = fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?allowNativePasswords=true", user, password, host, database)
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?allowNativePasswords=true", user, password, host, database)
 
 	// Connect to the database
 	db, err := sql.Open("mysql", connectionString)
 	if err != nil {
-		logger.Errorf("Error connecting to mysql database: %s", err)
+		logger.Errorf("Error connecting to MySQL database: %s", err)
 		return nil, err
 	}
 	defer db.Close()
@@ -31,6 +31,7 @@ func InitializeMySQL() (*sql.DB, error) {
 	// Check the connection
 	err = db.Ping()
 	if err != nil {
+		logger.Errorf("Error pinging MySQL database: %s", err)
 		return nil, err
 	}
 	logger.Info("Successfully connected to MySQL database")
