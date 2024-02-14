@@ -7,11 +7,11 @@ import (
 )
 
 var (
-	Logger *config.Logger
-	Db     *sql.DB
+	logger *config.Logger
+	db     *sql.DB
 )
 
 func InitializeHandler() {
-	Logger = config.GetLogger("handler")
-	Db = config.GetDB()
+	logger = config.GetLogger("handler")
+	db = config.GetDB()
 }
