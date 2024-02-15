@@ -9,7 +9,7 @@ import (
 
 // InitializeMySQL creates a new MySQL database connection and returns it.
 func InitializeMySQL() (*sql.DB, error) {
-	logger := GetLogger("sqlite")
+	logger := GetLogger("mysql")
 
 	// Get environment variables
 	user := GetEnv("DB_USER")
@@ -18,7 +18,7 @@ func InitializeMySQL() (*sql.DB, error) {
 	database := GetEnv("DB_DATABASE")
 
 	// Create the connection string
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?allowNativePasswords=true", user, password, host, database)
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?allowNativePasswords=true&parseTime=true", user, password, host, database)
 
 	// Connect to the database
 	db, err := sql.Open("mysql", connectionString)

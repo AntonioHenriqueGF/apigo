@@ -1,17 +1,16 @@
 package handler
 
 import (
-	"database/sql"
-
 	"github.com/AntonioHenriqueGF/apigo/config"
+	"github.com/AntonioHenriqueGF/apigo/repositories"
 )
 
 var (
 	logger *config.Logger
-	db     *sql.DB
+	repo   *repositories.Container
 )
 
 func InitializeHandler() {
 	logger = config.GetLogger("handler")
-	db = config.GetDB()
+	repo = config.GetRepository()
 }

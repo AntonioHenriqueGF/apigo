@@ -2,15 +2,16 @@ package config
 
 import (
 	"database/sql"
-	"fmt"
 	"os"
 
+	"github.com/AntonioHenriqueGF/apigo/repositories"
 	"github.com/joho/godotenv"
 )
 
 var (
 	db     *sql.DB
 	logger *Logger
+	repo   *repositories.Container
 )
 
 func Init() error {
@@ -21,14 +22,12 @@ func Init() error {
 	}
 	logger.Infof("Loaded .env file")
 
-	// Initialize Database Connection
-	db, err = InitializeMySQL()
+	// Initialize Database Repositories
 
-	db.Stats()
-
-	if err != nil {
-		return fmt.Errorf("Error initializing database: %v", err)
-	}
+	repo = repositories.New(repositories.Options{
+		WriterSqlx: GetWriterSqlx(),
+		ReaderSqlx: GetReaderSqlx(),
+	})
 
 	return nil
 }
@@ -45,4 +44,8 @@ func GetLogger(p string) *Logger {
 	// Initialized Logger
 	logger = NewLogger(p)
 	return logger
+}
+
+func GetRepository() *repositories.Container {
+	return repo
 }
