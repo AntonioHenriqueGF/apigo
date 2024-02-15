@@ -14,7 +14,5 @@ func ListPostsHandler(ctx *gin.Context) {
 		logger.Errorf("Error listing posts: %s", err.Error())
 	}
 
-	logger.Debug(posts)
-
 	ctx.JSON(http.StatusOK, posts)
 }

@@ -11,8 +11,8 @@ func errBadBodyFormating() error {
 }
 
 type CreatePostRequest struct {
-	Title   string `json:"title" binding:"required"`
-	Content string `json:"content" binding:"required"`
+	Title   string `json:"pst_title" binding:"required"`
+	Content string `json:"pst_content" binding:"required"`
 }
 
 func (r *CreatePostRequest) Validate() error {

@@ -27,5 +27,11 @@ func CreatePostHandler(ctx *gin.Context) {
 		Date_creation: &dt,
 	}
 
-	logger.Debug(post)
+	err := repo.Post.Create(ctx, &post)
+
+	if err != nil {
+		logger.Errorf("Error creating post: %s", err.Error())
+		sendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
 }
