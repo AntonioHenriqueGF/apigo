@@ -7,8 +7,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// Get environment variables
-
 func GetReaderSqlx() *sqlx.DB {
 
 	// Get environment variables
