@@ -13,10 +13,6 @@
 
 *.out
 
-# DB Folder
-
-db/
-
 # Environment
 
 .env
