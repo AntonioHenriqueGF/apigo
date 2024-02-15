@@ -34,4 +34,6 @@ func CreatePostHandler(ctx *gin.Context) {
 		sendError(ctx, http.StatusInternalServerError, err.Error())
 		return
 	}
+
+	sendSuccess(ctx, "Post created")
 }
