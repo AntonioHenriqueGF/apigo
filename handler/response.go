@@ -20,3 +20,7 @@ func sendSuccess(ctx *gin.Context, operation string) {
 		"message": fmt.Sprintf("Operation success: %s", operation),
 	})
 }
+
+func sendBody(ctx *gin.Context, code int, body interface{}) {
+	ctx.JSON(code, body)
+}

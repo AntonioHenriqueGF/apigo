@@ -12,7 +12,7 @@ func InitializeRoutes(router *gin.Engine) {
 	v1 := router.Group("/api/v1")
 	{
 		// Show Post
-		v1.GET("/post", handler.ShowPostHandler)
+		v1.GET("/post/:id", handler.ShowPostHandler)
 
 		// Create Post
 		v1.POST("/post", handler.CreatePostHandler)

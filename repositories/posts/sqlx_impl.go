@@ -51,3 +51,16 @@ func (p *postDbSqlx) Create(ctx context.Context, post *schemas.Post) error {
 
 	return nil
 }
+
+// GetByID returns a post from the database by its ID.
+func (p *postDbSqlx) GetByID(ctx context.Context, id string) (*schemas.Post, error) {
+	post := &schemas.Post{}
+
+	err := p.reader.GetContext(ctx, post, `SELECT * FROM posts WHERE pst_id = ?`, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return post, nil
+}

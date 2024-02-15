@@ -10,4 +10,5 @@ import (
 type PostRepositorieInterface interface {
 	GetAll(ctx context.Context) ([]schemas.Post, error)
 	Create(ctx context.Context, post *schemas.Post) error
+	GetByID(ctx context.Context, id string) (*schemas.Post, error)
 }
