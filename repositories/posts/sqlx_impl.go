@@ -64,3 +64,14 @@ func (p *postDbSqlx) GetByID(ctx context.Context, id string) (*schemas.Post, err
 
 	return post, nil
 }
+
+// DeleteByID deletes a post from the database by its ID.
+func (p *postDbSqlx) DeleteByID(ctx context.Context, id string) error {
+	_, err := p.writer.ExecContext(ctx, `DELETE FROM posts WHERE pst_id = ?`, id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

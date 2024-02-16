@@ -7,7 +7,21 @@ import (
 )
 
 func DeletePostHandler(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
-		"message": "DELETE /post",
-	})
+	id := ctx.Param("id")
+	if id == "" {
+		err := errParamIsRequired("id", "urlParam")
+		logger.Errorf("validation error: %v", err.Error())
+		sendError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err := repo.Post.DeleteByID(ctx, id)
+
+	if err != nil {
+		logger.Errorf("Error deleting post: %s", err.Error())
+		sendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	sendSuccess(ctx, "Post deleted")
 }
