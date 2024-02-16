@@ -18,10 +18,10 @@ func InitializeRoutes(router *gin.Engine) {
 		v1.POST("/post", handler.CreatePostHandler)
 
 		// Update Post
-		v1.PUT("/post", handler.UpdatePostHandler)
+		v1.PUT("/post/:id", handler.UpdatePostHandler)
 
 		// Delete Post
-		v1.DELETE("/post", handler.DeletePostHandler)
+		v1.DELETE("/post/:id", handler.DeletePostHandler)
 
 		// Show all Posts
 		v1.GET("/posts", handler.ListPostsHandler)
