@@ -3,11 +3,15 @@ package handler
 import "fmt"
 
 func errParamIsRequired(name string, typ string) error {
-	return fmt.Errorf("param: missing field '%s' (of type '%s') required", name, typ)
+	return fmt.Errorf("[param] missing required field '%s' (of type '%s')", name, typ)
+}
+
+func errEntrieNotFound(entrieName string) error {
+	return fmt.Errorf("[query] %s not found", entrieName)
 }
 
 func errBadBodyFormating() error {
-	return fmt.Errorf("payload: body is empty or malformed")
+	return fmt.Errorf("[payload] body is empty or malformed")
 }
 
 type CreatePostRequest struct {
