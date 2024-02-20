@@ -15,7 +15,7 @@ func DeletePostHandler(ctx *gin.Context) {
 		return
 	}
 
-	post, err := repo.Post.ExistsByID(ctx, id)
+	hasPost, err := repo.Post.ExistsByID(ctx, id)
 
 	if err != nil {
 		logger.Errorf("Error obtaining post: %s", err.Error())
@@ -23,7 +23,7 @@ func DeletePostHandler(ctx *gin.Context) {
 		return
 	}
 
-	if !post {
+	if !hasPost {
 		err := errEntrieNotFound("post")
 		logger.Errorf("validation error: %v", err.Error())
 		sendError(ctx, http.StatusBadRequest, err.Error())
