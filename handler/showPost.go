@@ -15,6 +15,21 @@ func ShowPostHandler(ctx *gin.Context) {
 		return
 	}
 
+	hasPost, err := repo.Post.ExistsByID(ctx, id)
+
+	if err != nil {
+		logger.Errorf("Error obtaining post: %s", err.Error())
+		sendError(ctx, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	if !hasPost {
+		err := errEntrieNotFound("post")
+		logger.Errorf("validation error: %v", err.Error())
+		sendError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
 	post, err := repo.Post.GetByID(ctx, id)
 
 	if err != nil {
