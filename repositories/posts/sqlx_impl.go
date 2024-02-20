@@ -52,19 +52,6 @@ func (p *postDbSqlx) Create(ctx context.Context, post *schemas.Post) error {
 	return nil
 }
 
-// GetByID returns a post from the database by its ID.
-func (p *postDbSqlx) GetByID(ctx context.Context, id string) (*schemas.Post, error) {
-	post := &schemas.Post{}
-
-	err := p.reader.GetContext(ctx, post, `SELECT * FROM posts WHERE pst_id = ?`, id)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return post, nil
-}
-
 // Verifies if the post exists in the database by its ID.
 func (p *postDbSqlx) ExistsByID(ctx context.Context, id string) (bool, error) {
 	var count int
@@ -76,6 +63,19 @@ func (p *postDbSqlx) ExistsByID(ctx context.Context, id string) (bool, error) {
 	}
 
 	return count > 0, nil
+}
+
+// GetByID returns a post from the database by its ID.
+func (p *postDbSqlx) GetByID(ctx context.Context, id string) (*schemas.Post, error) {
+	post := &schemas.Post{}
+
+	err := p.reader.GetContext(ctx, post, `SELECT * FROM posts WHERE pst_id = ?`, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return post, nil
 }
 
 // DeleteByID deletes a post from the database by its ID.
