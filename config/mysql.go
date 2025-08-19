@@ -13,12 +13,13 @@ func InitializeMySQL() (*sql.DB, error) {
 
 	// Get environment variables
 	user := GetEnv("DB_USER")
+	port := GetEnv("DB_PORT")
 	password := GetEnv("DB_PASSWORD")
 	host := GetEnv("DB_HOST")
 	database := GetEnv("DB_DATABASE")
 
 	// Create the connection string
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?allowNativePasswords=true&parseTime=true", user, password, host, database)
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowNativePasswords=true&parseTime=true", user, password, host, port, database)
 
 	// Connect to the database
 	db, err := sql.Open("mysql", connectionString)
