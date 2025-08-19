@@ -48,8 +48,8 @@ INSERT INTO `categories` (`cat_id`, `cat_description`) VALUES
 CREATE TABLE `posts` (
   `pst_id` int(11) NOT NULL,
   `pst_title` varchar(60) NOT NULL,
-  `pst_date_creation` date NOT NULL DEFAULT current_timestamp(),
-  `pst_date_edit` date DEFAULT NULL,
+  `pst_date_creation` timestamp NOT NULL DEFAULT current_timestamp(),
+  `pst_date_edit` timestamp DEFAULT NULL,
   `pst_content` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
