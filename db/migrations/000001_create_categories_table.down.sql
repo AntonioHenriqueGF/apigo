@@ -1,0 +1,2 @@
+-- There will be no down migration for security reasons. 
+-- If this table needs to be removed, it must be done by another migration.
