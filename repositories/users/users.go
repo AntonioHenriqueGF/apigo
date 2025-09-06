@@ -7,8 +7,9 @@ import (
 )
 
 type UsersRepositorieInterface interface {
-	CreateUser(ctx context.Context, user *schemas.User) error
-	GetUserByID(ctx context.Context, id string) (*schemas.User, error)
-	UpdateUser(ctx context.Context, user *schemas.User) error
-	DeleteUser(ctx context.Context, id string) error
+	Create(ctx context.Context, user *schemas.User) error
+	GetByID(ctx context.Context, id string) (*schemas.User, error)
+	Login(ctx context.Context, email string, password string) error
+	Update(ctx context.Context, user *schemas.User) error
+	Delete(ctx context.Context, id string) error
 }

@@ -25,5 +25,11 @@ func InitializeRoutes(router *gin.Engine) {
 
 		// Show all Posts
 		v1.GET("/posts", handler.ListPostsHandler)
+
+		// Create User
+		v1.POST("/user", handler.CreateUserHandler)
+
+		// Log User
+		v1.POST("/login", handler.LoginUserHandler)
 	}
 }

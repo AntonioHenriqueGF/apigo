@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"github.com/AntonioHenriqueGF/apigo/repositories/posts"
+	"github.com/AntonioHenriqueGF/apigo/repositories/users"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -13,11 +14,13 @@ type Options struct {
 // Container holds all repositories.
 type Container struct {
 	Post posts.PostRepositorieInterface
+	User users.UsersRepositorieInterface
 }
 
 // New creates a new instance of the repositories container.
 func New(options Options) *Container {
 	return &Container{
 		Post: posts.NewSqlx(options.ReaderSqlx, options.WriterSqlx),
+		User: users.NewSqlx(options.ReaderSqlx, options.WriterSqlx),
 	}
 }
