@@ -12,11 +12,11 @@ func InitializeMySQL() (*sql.DB, error) {
 	logger := GetLogger("mysql")
 
 	// Get environment variables
-	user := GetEnv("DB_USER")
-	port := GetEnv("DB_PORT")
-	password := GetEnv("DB_PASSWORD")
-	host := GetEnv("DB_HOST")
-	database := GetEnv("DB_DATABASE")
+	user := GetEnv("MYSQL_USER")
+	password := GetEnv("MYSQL_ROOT_PASSWORD")
+	host := GetEnv("MYSQL_HOST")
+	port := GetEnv("MYSQL_PORT")
+	database := GetEnv("MYSQL_DATABASE")
 
 	// Create the connection string
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowNativePasswords=true&parseTime=true", user, password, host, port, database)
