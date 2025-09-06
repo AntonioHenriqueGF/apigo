@@ -9,7 +9,7 @@ import (
 type UsersRepositorieInterface interface {
 	Create(ctx context.Context, user *schemas.User) error
 	GetByID(ctx context.Context, id string) (*schemas.User, error)
-	Login(ctx context.Context, email string, password string) error
+	Login(ctx context.Context, email string, password string) (*schemas.UserBD, error)
 	Update(ctx context.Context, user *schemas.User) error
 	Delete(ctx context.Context, id string) error
 }

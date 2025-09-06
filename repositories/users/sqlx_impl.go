@@ -58,18 +58,18 @@ func (u *userDbSqlx) GetByEmail(ctx context.Context, email string) (*schemas.Use
 	return &user, nil
 }
 
-func (u *userDbSqlx) Login(ctx context.Context, email string, password string) error {
+func (u *userDbSqlx) Login(ctx context.Context, email string, password string) (*schemas.UserBD, error) {
 	var user schemas.UserBD
 	err := u.reader.GetContext(ctx, &user, `SELECT * FROM users WHERE usu_email = ?`, email)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return &user, nil
 }
 
 func (u *userDbSqlx) GetByID(ctx context.Context, id string) (*schemas.User, error) {
