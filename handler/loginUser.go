@@ -15,7 +15,7 @@ func LoginUserHandler(ctx *gin.Context) {
 		tokenParts[1] != "" {
 		_, err := utils.VerifyToken(tokenParts[1])
 		if err == nil {
-			sendError(ctx, http.StatusBadRequest, "User already logged in")
+			ctx.JSON(http.StatusOK, gin.H{"token": tokenParts[1]})
 			return
 		}
 	}
