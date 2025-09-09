@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/AntonioHenriqueGF/apigo/utils"
 	"github.com/gin-gonic/gin"
@@ -9,6 +10,15 @@ import (
 
 func LoginUserHandler(ctx *gin.Context) {
 	request := LoginUserRequest{}
+
+	if tokenParts := strings.Split(ctx.GetHeader("Authorization"), " "); (len(tokenParts) == 2 && tokenParts[0] == "Bearer") &&
+		tokenParts[1] != "" {
+		_, err := utils.VerifyToken(tokenParts[1])
+		if err == nil {
+			sendError(ctx, http.StatusBadRequest, "User already logged in")
+			return
+		}
+	}
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		logger.Errorf("failed to bind request: %v", err)
