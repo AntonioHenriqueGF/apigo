@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/AntonioHenriqueGF/apigo/schemas"
@@ -53,6 +54,9 @@ func (u *userDbSqlx) GetByEmail(ctx context.Context, email string) (*schemas.Use
 	var user schemas.UserBD
 	err := u.reader.GetContext(ctx, &user, `SELECT * FROM users WHERE usu_email = ?`, email)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil // Retorna nil para usuário e erro quando não há resultados
+		}
 		return nil, err
 	}
 	return &user, nil
