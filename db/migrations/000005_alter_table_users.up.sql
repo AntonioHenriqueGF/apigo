@@ -1,0 +1,2 @@
+ALTER TABLE users
+MODIFY COLUMN `usu_email` varchar(100) NOT NULL UNIQUE;

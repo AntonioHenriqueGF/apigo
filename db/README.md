@@ -18,4 +18,4 @@ Para rodar as migrations, inicie o container do banco de dados e utilize o coman
 migrate -path db/migrations -database "mysql://<usuario>:<senha>@tcp(<host>:3306)/<database>" up
 ```
 
-No nosso caso, a string de conexão seria `mysql://<usuario>:<senha>@tcp(db:3306)/api_go_database`. Desta forma, o `migrate` conseguirá se conectar ao banco de dados dentro do container corretamente e aplicar as migrations.
+No nosso caso, a string de conexão seria `mysql://<usuario>:<senha>@tcp(127.0.0.1:3306)/api_go_database`. Desta forma, o `migrate` conseguirá se conectar ao banco de dados dentro do container corretamente e aplicar as migrations.

@@ -3,6 +3,8 @@ networks:
     driver: bridge
 
 volumes:
+  # O padrão proficional de persistência é por bind mount, mas para facilitar o uso em ambientes de desenvolvimento
+  # e testes que rodam em Windows, utilizamos um "volume nomeado" gerenciado pelo Docker.
   db_data:
 
 services:
@@ -13,7 +15,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - apigo_network
 
@@ -24,7 +27,8 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - api
+      db:
+        condition: service_healthy
     networks:
       - apigo_network
 
@@ -32,16 +36,22 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: api_go_database
-    ports:
-      - "3306:3306"
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
     networks:
       - apigo_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-psecret"]
+      test: >
+        mysqladmin ping
+        -h localhost
+        -u root
+        -p"$MYSQL_ROOT_PASSWORD"
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     volumes:
       - db_data:/var/lib/mysql
+    # Exemplo de bind mount para persistência local:
+    # - /srv/apigo/volumes/mysql:/var/lib/mysql
+    # Obs: Ao utilizar bind mount em Windows, certifique-se de que o diretório existe e possui as permissões corretas.

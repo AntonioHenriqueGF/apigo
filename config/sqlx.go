@@ -9,11 +9,16 @@ import (
 )
 
 func GetReaderSqlx() *sqlx.DB {
-	user := GetEnv("DB_USER")
-	password := GetEnv("DB_PASSWORD")
-	host := GetEnv("DB_HOST")
-	database := GetEnv("DB_DATABASE")
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?allowNativePasswords=false&parseTime=true", user, password, host, database)
+
+	// Get environment variables
+	user := GetEnv("MYSQL_USER")
+	password := GetEnv("MYSQL_ROOT_PASSWORD")
+	host := GetEnv("MYSQL_HOST")
+	port := GetEnv("MYSQL_PORT")
+	database := GetEnv("MYSQL_DATABASE")
+
+	// Create the connection string
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowNativePasswords=true&parseTime=true", user, password, host, port, database)
 
 	var db *sqlx.DB
 	var err error
@@ -36,11 +41,17 @@ func GetReaderSqlx() *sqlx.DB {
 }
 
 func GetWriterSqlx() *sqlx.DB {
-	user := GetEnv("DB_USER")
-	password := GetEnv("DB_PASSWORD")
-	host := GetEnv("DB_HOST")
-	database := GetEnv("DB_DATABASE")
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?allowNativePasswords=false&parseTime=true", user, password, host, database)
+
+	// Get environment variables
+	user := GetEnv("MYSQL_USER")
+	password := GetEnv("MYSQL_ROOT_PASSWORD")
+	host := GetEnv("MYSQL_HOST")
+	port := GetEnv("MYSQL_PORT")
+	database := GetEnv("MYSQL_DATABASE")
+
+	// Create the connection string
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowNativePasswords=true&parseTime=true", user, password, host, port, database)
+
 	logger.Debug(connectionString)
 
 	var db *sqlx.DB
