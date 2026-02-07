@@ -34,6 +34,7 @@ services:
     image: mysql:8.0
     restart: always
     environment:
+      - MYSQL_USER
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE
     networks:
@@ -42,7 +43,7 @@ services:
       test: >
         mysqladmin ping
         -h localhost
-        -u root
+        -u "$MYSQL_USER"
         -p"$MYSQL_ROOT_PASSWORD"
       interval: 10s
       timeout: 5s
@@ -53,3 +54,22 @@ services:
     # Exemplo de bind mount para persistência local:
     # - /srv/apigo/volumes/mysql:/var/lib/mysql
     # Obs: Ao utilizar bind mount em Windows, certifique-se de que o diretório existe e possui as permissões corretas.
+  
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - MYSQL_USER
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+    networks:
+      - apigo_network
+    volumes:
+      - ./db/migrations:/migrations
+    entrypoint: >
+      migrate
+      -path /migrations
+      -database "mysql://$MYSQL_USER:$MYSQL_ROOT_PASSWORD@tcp(db:3306)/$MYSQL_DATABASE"
+    command: up
