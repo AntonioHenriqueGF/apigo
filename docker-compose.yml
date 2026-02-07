@@ -68,7 +68,6 @@ services:
       - apigo_network
     volumes:
       - ./db/migrations:/migrations
-    # migrate -path db/migrations -database "mysql://<usuario>:<senha>@tcp(<host>:3306)/<database>" up
     entrypoint: >
       migrate
       -path /migrations
