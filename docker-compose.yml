@@ -27,6 +27,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    environment:
+      - NGINX_SERVER_NAME
     networks:
       - apigo_network
 
