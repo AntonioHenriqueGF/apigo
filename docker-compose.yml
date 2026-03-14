@@ -6,6 +6,7 @@ volumes:
   # O padrão proficional de persistência é por bind mount, mas para facilitar o uso em ambientes de desenvolvimento
   # e testes que rodam em Windows, utilizamos um "volume nomeado" gerenciado pelo Docker.
   db_data:
+  certbot-etc:
 
 services:
   api:
@@ -21,9 +22,9 @@ services:
   nginx:
     build:
       context: .
-      dockerfile: nginx.dockerfile
-    ports:
-      - "80:80"
+      dockerfile: ./nginx/nginx.dockerfile
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       db:
         condition: service_healthy
@@ -39,12 +40,15 @@ services:
       - MYSQL_USER
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE
+      - MYSQL_HOST
+      - MYSQL_PORT
     networks:
       - apigo_network
     healthcheck:
       test: >
         mysqladmin ping
-        -h localhost
+        -h "$MYSQL_HOST"
+        -P "$MYSQL_PORT"
         -u "$MYSQL_USER"
         -p"$MYSQL_ROOT_PASSWORD"
       interval: 10s
@@ -66,6 +70,8 @@ services:
       - MYSQL_USER
       - MYSQL_ROOT_PASSWORD
       - MYSQL_DATABASE
+      - MYSQL_PORT
+      - MYSQL_HOST
     networks:
       - apigo_network
     volumes:
@@ -73,5 +79,5 @@ services:
     entrypoint: >
       migrate
       -path /migrations
-      -database "mysql://$MYSQL_USER:$MYSQL_ROOT_PASSWORD@tcp(db:3306)/$MYSQL_DATABASE"
+      -database "mysql://$MYSQL_USER:$MYSQL_ROOT_PASSWORD@tcp($MYSQL_HOST:$MYSQL_PORT)/$MYSQL_DATABASE"
     command: up
