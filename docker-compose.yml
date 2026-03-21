@@ -81,3 +81,5 @@ services:
       -path /migrations
       -database "mysql://$MYSQL_USER:$MYSQL_ROOT_PASSWORD@tcp($MYSQL_HOST:$MYSQL_PORT)/$MYSQL_DATABASE"
     command: up
+    # Este serviço é projetado para ser executado uma única vez para aplicar as migrações. Ele pode ser removido 
+    # ou comentado após a execução inicial.
