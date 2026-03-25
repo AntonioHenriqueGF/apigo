@@ -1,49 +1,49 @@
 # API Go Project
 
-Este projeto é uma API desenvolvida em Go, com suporte a banco de dados, autenticação e configuração de ambientes utilizando Docker e Nginx.
+This project is an API developed in Go, with support for database, authentication, and environment configuration using Docker and Nginx.
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Project Structure
 
-A estrutura do projeto está organizada da seguinte forma:
+The project structure is organized as follows:
 
-- **`config/`**: Configurações gerais do projeto (ex.: banco de dados, logger).
-- **`db/`**: Scripts SQL e migrações para o banco de dados.
-- **`handler/`**: Handlers responsáveis por gerenciar as requisições HTTP.
-- **`nginx/`**: Configurações do Nginx para desenvolvimento e produção.
-- **`repositories/`**: Implementações de acesso ao banco de dados.
-- **`router/`**: Configuração das rotas da API.
-- **`schemas/`**: Definições de schemas para validação de dados.
-- **`utils/`**: Utilitários como geração de tokens JWT.
+- **`config/`**: General project configurations (e.g., database, logger).
+- **`db/`**: SQL scripts and database migrations.
+- **`handler/`**: Handlers responsible for managing HTTP requests.
+- **`nginx/`**: Nginx configurations for development and production.
+- **`repositories/`**: Database access implementations.
+- **`router/`**: API route configuration.
+- **`schemas/`**: Data validation schemas definitions.
+- **`utils/`**: Utilities such as JWT token generation.
 
 ---
 
-## 🚀 Instruções de Uso
+## 🚀 Usage Instructions
 
-### 1. **Pré-requisitos**
-Certifique-se de ter os seguintes softwares instalados:
-- Docker e Docker Compose
+### 1. **Prerequisites**
+Make sure you have the following software installed:
+- Docker and Docker Compose
 
-### 2. **Configuração do Ambiente**
-1. Copie o arquivo `example.env` para `.env` e configure as variáveis de ambiente necessárias.
+### 2. **Environment Configuration**
+1. Copy the `example.env` file to `.env` and configure the necessary environment variables.
 
-Obs: Não é necessário rodar manualmente as migrações, pois o serviço `migrations` no `docker-compose.yml` está configurado para aplicar as migrações automaticamente ao iniciar o ambiente.
+Note: It is not necessary to manually run the migrations, as the `migrations` service in `docker-compose.yml` is configured to automatically apply migrations when starting the environment.
 
-### 3. **Subindo o Ambiente de Desenvolvimento**
-Execute o seguinte comando para iniciar o ambiente local:
+### 3. **Starting the Development Environment**
+Run the following command to start the local environment:
 ```bash
 docker-compose up -d --build
 ```
-Isso irá iniciar os serviços definidos no `docker-compose.override.yml`, incluindo a API e o Nginx.
+This will start the services defined in `docker-compose.override.yml`, including the API and Nginx.
 
-### 4. **Configurando SSL em produção**
-Para configurar SSL em produção, é preciso alterar o arquivo `nginx/templates/prod.conf.template` para ter apenas HTTP (porta 80) e configurar o Certbot para gerar os certificados SSL, sem redirecionar HTTP para HTTPS. Siga o exemplo em `nginx/conf.d/prod.conf.gen-cert`. Depois rode:
+### 4. **Configuring SSL in Production**
+To configure SSL in production, you need to modify the `nginx/templates/prod.conf.template` file to have only HTTP (port 80) and configure Certbot to generate SSL certificates without redirecting HTTP to HTTPS. Follow the example in `nginx/conf.d/prod.conf.gen-cert`. Then run:
 ```bash
 mkdir -p certbot/www/.well-known/acme-challenge
 ```
 
-Ao rodar o comando abaixo, sertifique-se de substituir `seu-dominio.com` e `seu@email.com` pelos valores corretos. O comando irá gerar o certificado SSL utilizando o método de validação HTTP, onde o Certbot criará um arquivo de desafio no diretório especificado para comprovar a posse do domínio.
+When running the command below, make sure to replace `your-domain.com` and `your@email.com` with the correct values. The command will generate the SSL certificate using the HTTP validation method, where Certbot will create a challenge file in the specified directory to prove domain ownership.
 
 ```bash
 docker compose \
@@ -52,37 +52,37 @@ docker compose \
 run --rm certbot certonly \
 --webroot \
 --webroot-path=/var/www/certbot \
--d seu-dominio.com \
---email seu@email.com \
+-d your-domain.com \
+--email your@email.com \
 --agree-tos \
 --no-eff-email
 ```
 
-Depois de gerar o certificado, configure o Cron do servidor para renovar o certificado automaticamente, rodando o seguinte comando:
+After generating the certificate, configure the server's Cron to automatically renew the certificate by running the following command:
 ```bash
 crontab -e
 ```
-Depois adicione a seguinte linha para renovar o certificado diariamente, substituindo `/caminho` pelo caminho absoluto para o seu projeto. Este comando irá renovar o certificado e recarregar o Nginx para aplicar as mudanças:
+Then add the following line to renew the certificate daily, replacing `/path` with the absolute path to your project. This command will renew the certificate and reload Nginx to apply the changes:
 
 ```bash
-0 6 * * * docker compose -f /caminho/docker-compose.yml -f /caminho/docker-compose.prod.yml run --rm certbot renew && docker compose -f /caminho/docker-compose.yml -f /caminho/docker-compose.prod.yml exec nginx nginx -s reload
+0 6 * * * docker compose -f /path/docker-compose.yml -f /path/docker-compose.prod.yml run --rm certbot renew && docker compose -f /path/docker-compose.yml -f /path/docker-compose.prod.yml exec nginx nginx -s reload
 ```
 
-Obs: O horário do cron é em UTC, então ajuste o horário conforme necessário para garantir que a renovação ocorra em um horário conveniente. Neste caso, o cron está configurado para rodar diariamente às 6:00 UTC que equivale a 3:00 no horário de Brasília (BRT), horário de pouco tráfego.
+Note: The cron time is in UTC, so adjust the time as needed to ensure the renewal occurs at a convenient time. In this case, the cron is set to run daily at 6:00 UTC, which is equivalent to 3:00 AM Brasília time (BRT), a time of low traffic in Brazil.
 
-### 5. **Deploy em Produção**
-1. Configure as variáveis de ambiente no arquivo `.env`.
-2. Utilize os arquivos `docker-compose.yml` e `docker-compose.prod.yml` para subir os serviços:
+### 5. **Production Deployment**
+1. Configure the environment variables in the `.env` file.
+2. Use the `docker-compose.yml` and `docker-compose.prod.yml` files to start the services:
 ```bash
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
 ---
 
-## 🛠️ Manutenção
-- Para aplicar migrações no banco de dados, utilize os scripts em `db/migrations/`.
+## 🛠️ Maintenance
+- To apply database migrations, use the scripts in `db/migrations/`.
 
 ---
 
-## 📌 Conclusão
-Este projeto foi desenvolvido com foco em escalabilidade e boas práticas, utilizando Go, Docker e Nginx para fornecer uma API robusta e segura.
+## 📌 Conclusion
+This project was developed with a focus on scalability and best practices, using Go, Docker, and Nginx to provide a robust and secure API.
