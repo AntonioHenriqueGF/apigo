@@ -1,10 +1,10 @@
 # Nginx Configuration
 
-Este diretório contém a configuração do Nginx para diferentes ambientes do projeto, seguindo uma abordagem profissional baseada em separação de responsabilidades.
+This directory contains the Nginx configuration for different project environments, following a professional approach based on separation of concerns.
 
 ---
 
-## 📁 Estrutura
+## 📁 Structure
 
 ```
 nginx/
@@ -17,90 +17,90 @@ nginx/
 
 ---
 
-## 🧠 Conceito geral
+## 🧠 General Concept
 
-A configuração foi separada em:
+The configuration is divided into:
 
-* **Configuração global** → `nginx.conf`
-* **Configuração por ambiente** → `dev` e `prod`
-* **Template dinâmico** → usado em produção com variáveis de ambiente
+* **Global configuration** → `nginx.conf`
+* **Environment-specific configuration** → `dev` and `prod`
+* **Dynamic template** → used in production with environment variables
 
 ---
 
-## ⚙️ nginx.conf (Configuração Global)
+## ⚙️ nginx.conf (Global Configuration)
 
-Arquivo base do Nginx.
+Base Nginx file.
 
-Responsável por:
+Responsible for:
 
-* definir workers
-* configurar `events`
-* configurar `http`
-* incluir os arquivos de configuração de servidores
+* defining workers
+* configuring `events`
+* configuring `http`
+* including server configuration files
 
-Exemplo:
+Example:
 
 ```
 include /etc/nginx/conf.d/*.conf;
 ```
 
-👉 Este arquivo **não contém blocos `server {}`**.
+👉 This file **does not contain `server {}` blocks**.
 
 ---
 
-## 🟢 Ambiente de Desenvolvimento (dev.conf)
+## 🟢 Development Environment (dev.conf)
 
-Localização:
+Location:
 
 ```
 nginx/conf.d/dev.conf
 ```
 
-Características:
+Characteristics:
 
-* Usa apenas HTTP (porta 80)
-* Sem HTTPS
-* Sem redirecionamento
-* Proxy direto para a API
+* Uses only HTTP (port 80)
+* No HTTPS
+* No redirection
+* Direct proxy to the API
 
-Objetivo:
+Purpose:
 
-* Simplicidade
-* Facilidade de desenvolvimento local
-* Evitar complexidade com certificados
+* Simplicity
+* Ease of local development
+* Avoid complexity with certificates
 
 ---
 
-## 🔴 Ambiente de Produção (prod.conf.template)
+## 🔴 Production Environment (prod.conf.template)
 
-Localização:
+Location:
 
 ```
 nginx/templates/prod.conf.template
 ```
 
-Características:
+Characteristics:
 
-* Usa HTTP (porta 80) + HTTPS (porta 443)
-* Redireciona HTTP → HTTPS
-* Utiliza certificados SSL
-* Usa variável de ambiente: `${NGINX_SERVER_NAME}`
+* Uses HTTP (port 80) + HTTPS (port 443)
+* Redirects HTTP → HTTPS
+* Uses SSL certificates
+* Uses environment variable: `${NGINX_SERVER_NAME}`
 
 ---
 
-## 🔄 Uso de Templates
+## 🔄 Template Usage
 
-Em produção, utilizamos o mecanismo de template do Docker:
+In production, we use Docker’s template mechanism:
 
 ```
 /etc/nginx/templates/*.template
 ```
 
-O container do Nginx:
+The Nginx container:
 
-1. Processa os arquivos `.template`
-2. Substitui variáveis de ambiente (envsubst)
-3. Gera arquivos finais em:
+1. Processes `.template` files
+2. Replaces environment variables (envsubst)
+3. Generates final files in:
 
 ```
 /etc/nginx/conf.d/
@@ -108,45 +108,45 @@ O container do Nginx:
 
 ---
 
-## 🔐 HTTPS e Certbot
+## 🔐 HTTPS and Certbot
 
-A configuração de produção inclui suporte a certificados gerados via Certbot.
+The production configuration includes support for certificates generated via Certbot.
 
-### Webroot utilizado:
+### Webroot used:
 
 ```
 /var/www/certbot
 ```
 
-### Desafio HTTP:
+### HTTP challenge:
 
 ```
 /.well-known/acme-challenge/
 ```
 
-Este caminho é necessário para validação do domínio.
+This path is required for domain validation.
 
 ---
 
-## 🚀 Fluxo de ativação do HTTPS
+## 🚀 HTTPS Activation Flow
 
-1. Subir Nginx apenas com HTTP
-2. Validar acesso ao webroot
-3. Gerar certificado com Certbot
-4. Ativar configuração HTTPS
-5. Reiniciar Nginx
+1. Start Nginx with HTTP only
+2. Validate access to the webroot
+3. Generate certificate with Certbot
+4. Enable HTTPS configuration
+5. Restart Nginx
 
 ---
 
-## 🔁 Renovação automática
+## 🔁 Automatic Renewal
 
-A renovação do certificado é feita via cron:
+Certificate renewal is handled via cron:
 
 ```
 certbot renew
 ```
 
-Após renovação, o Nginx deve ser recarregado:
+After renewal, Nginx must be reloaded:
 
 ```
 nginx -s reload
@@ -154,40 +154,38 @@ nginx -s reload
 
 ---
 
-## 🧩 Separação por ambiente
+## 🧩 Environment Separation
 
-| Ambiente | Arquivo                        | Características  |
-| -------- | ------------------------------ | ---------------- |
-| Dev      | `conf.d/dev.conf`              | HTTP simples     |
-| Prod     | `templates/prod.conf.template` | HTTPS + redirect |
-
----
-
-## 🎯 Benefícios desta arquitetura
-
-* Separação clara de ambientes
-* Reutilização do container Nginx
-* Configuração declarativa
-* Fácil manutenção
-* Escalável para múltiplos domínios
+| Environment | File                           | Characteristics  |
+| ----------- | ------------------------------ | ---------------- |
+| Dev         | `conf.d/dev.conf`              | Simple HTTP      |
+| Prod        | `templates/prod.conf.template` | HTTPS + redirect |
 
 ---
 
-## 💡 Observações
+## 🎯 Benefits of this Architecture
 
-* Variáveis de ambiente não funcionam diretamente em arquivos `.conf`
-* Devemos usar `.template` para permitir substituição via `envsubst`
-* Evitar duplicação de Dockerfiles
+* Clear separation of environments
+* Reusable Nginx container
+* Declarative configuration
+* Easy maintenance
+* Scalable for multiple domains
 
 ---
 
-## 📌 Conclusão
+## 💡 Notes
 
-Esta estrutura segue boas práticas de infraestrutura moderna, permitindo:
+* Environment variables do not work directly in `.conf` files
+* Use `.template` files to allow substitution via `envsubst`
+* Avoid duplicating Dockerfiles
 
-* desenvolvimento simples
-* deploy seguro
-* fácil replicação para outros projetos
+---
 
-```
-```
+## 📌 Conclusion
+
+This structure follows modern infrastructure best practices, enabling:
+
+* simple development
+* secure deployment
+* easy replication for other projects
+
