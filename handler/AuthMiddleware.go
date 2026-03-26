@@ -2,7 +2,6 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/AntonioHenriqueGF/apigo/utils"
 	"github.com/gin-gonic/gin"
@@ -11,24 +10,14 @@ import (
 // AuthenticationMiddleware checks if the user has a valid JWT token
 func AuthenticationMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tokenString := c.GetHeader("Authorization")
-		if tokenString == "" {
+		cookie, err := c.Cookie("auth_token")
+		if err != nil {
 			sendError(c, http.StatusUnauthorized, "Missing authentication token")
 			c.Abort()
 			return
 		}
 
-		// The token should be prefixed with "Bearer "
-		tokenParts := strings.Split(tokenString, " ")
-		if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
-			sendError(c, http.StatusUnauthorized, "Invalid authentication token")
-			c.Abort()
-			return
-		}
-
-		tokenString = tokenParts[1]
-
-		claims, err := utils.VerifyToken(tokenString)
+		claims, err := utils.VerifyToken(cookie)
 		if err != nil {
 			sendError(c, http.StatusUnauthorized, "Invalid authentication token")
 			c.Abort()
