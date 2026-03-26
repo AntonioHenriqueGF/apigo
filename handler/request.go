@@ -88,3 +88,21 @@ func (r *LoginUserRequest) Validate() error {
 	}
 	return nil
 }
+
+type UpdatePostRequest struct {
+	Title   string `json:"pst_title" binding:"required"`
+	Content string `json:"pst_content" binding:"required"`
+}
+
+func (r *UpdatePostRequest) Validate() error {
+	if *r == (UpdatePostRequest{}) {
+		return errBadBodyFormating()
+	}
+	if r.Title == "" {
+		return errParamIsRequired("pst_title", "string")
+	}
+	if r.Content == "" {
+		return errParamIsRequired("pst_content", "string")
+	}
+	return nil
+}

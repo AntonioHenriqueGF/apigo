@@ -9,3 +9,14 @@ type Post struct {
 	Date_edit     *time.Time `json:"pst_date_edit" db:"pst_date_edit" binding:"required"`
 	Content       string     `json:"pst_content" db:"pst_content" binding:"required"`
 }
+
+type PostPatch struct {
+	Title   string `json:"pst_title" db:"pst_title"`
+	Content string `json:"pst_content" db:"pst_content"`
+}
+
+type PostUpdate struct {
+	ID      int    `json:"pst_id" db:"pst_id" binding:"required"`
+	Title   string `json:"pst_title" db:"pst_title" binding:"required"`
+	Content string `json:"pst_content" db:"pst_content" binding:"required"`
+}
