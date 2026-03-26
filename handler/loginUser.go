@@ -2,23 +2,18 @@ package handler
 
 import (
 	"net/http"
-	"strings"
 
+	"github.com/AntonioHenriqueGF/apigo/config"
 	"github.com/AntonioHenriqueGF/apigo/utils"
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	hasHttps bool
+)
+
 func LoginUserHandler(ctx *gin.Context) {
 	request := LoginUserRequest{}
-
-	if tokenParts := strings.Split(ctx.GetHeader("Authorization"), " "); (len(tokenParts) == 2 && tokenParts[0] == "Bearer") &&
-		tokenParts[1] != "" {
-		_, err := utils.VerifyToken(tokenParts[1])
-		if err == nil {
-			ctx.JSON(http.StatusOK, gin.H{"token": tokenParts[1]})
-			return
-		}
-	}
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		logger.Errorf("failed to bind request: %v", err)
@@ -38,6 +33,18 @@ func LoginUserHandler(ctx *gin.Context) {
 		logger.Errorf("failed to generate token: %v", err)
 		sendError(ctx, http.StatusInternalServerError, "Error generating token")
 	}
+
+	hasHttps := config.GetEnv("DEVELOPMENT_MODE") != "true"
+	logger.Infof("Setting auth cookie with Secure=%v", hasHttps)
+
+	http.SetCookie(ctx.Writer, &http.Cookie{
+		Name:     "auth_token",
+		Value:    token, // O JWT gerado
+		HttpOnly: true,
+		Secure:   hasHttps, // Apenas para HTTPS
+		SameSite: http.SameSiteStrictMode,
+		Path:     "/",
+	})
 
 	sendBody(ctx, http.StatusOK, gin.H{"token": token})
 }
