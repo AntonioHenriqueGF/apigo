@@ -2,6 +2,7 @@ package posts
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/AntonioHenriqueGF/apigo/schemas"
 	"github.com/jmoiron/sqlx"
@@ -84,6 +85,21 @@ func (p *postDbSqlx) DeleteByID(ctx context.Context, id string) error {
 
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (p *postDbSqlx) UpdatePostById(ctx context.Context, update schemas.PostUpdate) error {
+	result, err := p.writer.NamedExecContext(ctx, "UPDATE posts SET pst_title = :pst_title, pst_content = :pst_content, pst_date_edit = current_timestamp() WHERE pst_id = :pst_id", update)
+
+	if err != nil {
+		return err
+	}
+
+	rows, _ := result.RowsAffected()
+	if rows == 0 {
+		return sql.ErrNoRows
 	}
 
 	return nil
