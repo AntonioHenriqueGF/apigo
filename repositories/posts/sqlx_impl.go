@@ -3,6 +3,8 @@ package posts
 import (
 	"context"
 	"database/sql"
+	"strings"
+	"time"
 
 	"github.com/AntonioHenriqueGF/apigo/schemas"
 	"github.com/jmoiron/sqlx"
@@ -103,4 +105,28 @@ func (p *postDbSqlx) UpdatePostById(ctx context.Context, update schemas.PostUpda
 	}
 
 	return nil
+}
+
+func (p *postDbSqlx) PatchPostById(ctx context.Context, update schemas.PostPatch) error {
+	query := "UPDATE posts SET "
+	builder := &UpdateBuilder{}
+
+	if update.Title != nil {
+		builder.Add("pst_title", *update.Title)
+	}
+
+	if update.Content != nil {
+		builder.Add("pst_content", *update.Content)
+	}
+
+	// Sempre atualizar a data de edição
+	builder.Add("pst_date_edit", time.Now())
+
+	query += strings.Join(builder.setParts, ", ")
+	query += " WHERE pst_id = ?"
+
+	builder.args = append(builder.args, update.ID)
+
+	_, err := p.writer.DB.ExecContext(ctx, query, builder.args...)
+	return err
 }

@@ -11,8 +11,9 @@ type Post struct {
 }
 
 type PostPatch struct {
-	Title   string `json:"pst_title" db:"pst_title"`
-	Content string `json:"pst_content" db:"pst_content"`
+	ID      int     `json:"pst_id" db:"pst_id" binding:"required"`
+	Title   *string `json:"pst_title" db:"pst_title"`
+	Content *string `json:"pst_content" db:"pst_content"`
 }
 
 type PostUpdate struct {

@@ -14,4 +14,5 @@ type PostRepositorieInterface interface {
 	GetByID(ctx context.Context, id string) (*schemas.Post, error)
 	DeleteByID(ctx context.Context, id string) error
 	UpdatePostById(ctx context.Context, update schemas.PostUpdate) error
+	PatchPostById(ctx context.Context, update schemas.PostPatch) error
 }
