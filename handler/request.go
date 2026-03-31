@@ -23,6 +23,10 @@ func errBadBodyFormating() error {
 	return fmt.Errorf("[payload] body is empty or malformed")
 }
 
+func errBadFieldFormating(name string) error {
+	return fmt.Errorf("[payload] field '%s' is empty or malformed", name)
+}
+
 type CreatePostRequest struct {
 	Title   string `json:"pst_title" binding:"required"`
 	Content string `json:"pst_content" binding:"required"`
@@ -103,6 +107,24 @@ func (r *UpdatePostRequest) Validate() error {
 	}
 	if r.Content == "" {
 		return errParamIsRequired("pst_content", "string")
+	}
+	return nil
+}
+
+type PatchPostRequest struct {
+	Title   *string `json:"pst_title"`
+	Content *string `json:"pst_content"`
+}
+
+func (r *PatchPostRequest) Validate() error {
+	if *r == (PatchPostRequest{}) {
+		return errBadBodyFormating()
+	}
+	if r.Title != nil && *r.Title == "" {
+		return errBadFieldFormating("pst_title")
+	}
+	if r.Content != nil && *r.Content == "" {
+		return errBadFieldFormating("pst_content")
 	}
 	return nil
 }

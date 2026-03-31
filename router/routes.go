@@ -34,7 +34,7 @@ func InitializeRoutes(router *gin.Engine) {
 		protected.PUT("/post/:id", handler.UpdatePostHandler)
 
 		// Update Post
-		// protected.PATCH("/post/:id", handler.UpdatePostHandler)
+		protected.PATCH("/post/:id", handler.PatchPostHandler)
 
 		// Delete Post
 		protected.DELETE("/post/:id", handler.DeletePostHandler)
